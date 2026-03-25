@@ -1,14 +1,13 @@
 ---
 # ESPHome basic configuration for T-CAN485 board
 # https://www.lilygo.cc/products/t-can485
-# Andrew Elwell <Andrew.Elwell@gmail.com>, May 2024 with thanks to home assistant community posts and other online sources.
+# Fork of https://github.com/Elwell/pool-heatpump/
+# Cleaned up to be used as a package.
 
 substitutions:
   name_prefix: Pool Heat Pump
 
 esphome:
-  name: t-can485-heatpump
-  comment: Modbus interface for pool heatpump
   on_boot:
     then:
       - output.turn_on: bus_power
@@ -24,28 +23,6 @@ esp32:
 logger:
   level: INFO
   hardware_uart: UART0
-
-web_server:
-  port: 80
-
-prometheus:
-
-wifi:
-  ssid: Telemetry_2G
-  password: !secret telemetry_pw
-  fast_connect: true
-  domain: .iot.elwell.au
-  enable_btm: true
-  enable_rrm: true
-
-
-api:
-  encryption:
-    key: !secret api_pw
-
-ota:
-  platform: esphome
-  password: !secret ota_pw
 
 light:
   - platform: esp32_rmt_led_strip
@@ -77,13 +54,6 @@ output:
   - platform: gpio
     pin: GPIO16
     id: bus_power
-
-# Set up BLE for wifi provisioning
-esp32_improv:
-  authorizer: none
-
-# Sets up the improv via serial client for Wi-Fi provisioning
-improv_serial:
 
 # ESPHome doesn't seem to use uSD slot
 # sd_mosi: GPIO15
@@ -538,15 +508,15 @@ number:
     lambda: "return (x - 60)/2;"
     write_lambda: "return ((x * 2) + 60);"
 
-    # *0 - Function [0: Auto, 1*: Heating, 2: Cooling]
-    #  1 - Working Mode Selection [0:Smart, *1: iSilence, 3: Turbo]
-    #  2 - Auto Mode temp range [84-140, *112 default, step:2] [type 1]
-    # *3 - Heating mode Temp range [84-140, *112 default, step:2] [type 1]
-    #  4 - Cooling mode Temp range [84-140, *112 default, step:2] [type 1]
-    #  5 - Water pump working mode (P0) - [0* Continuous, 1: Water temp control, 2: Time/Water temp control]
+    # *0 - Function[0: Auto, 1*: Heating, 2: Cooling]
+    #  1 - Working Mode Selection[0:Smart, *1: iSilence, 3: Turbo]
+    #  2 - Auto Mode temp range[84-140, *112 default, step:2] [type 1]
+    # *3 - Heating mode Temp range[84-140, *112 default, step:2] [type 1]
+    #  4 - Cooling mode Temp range[84-140, *112 default, step:2] [type 1]
+    #  5 - Water pump working mode (P0) -[0* Continuous, 1: Water temp control, 2: Time/Water temp control]
     # *6 - Water pump working time setting (P1) 10-120(mins) default: 60, step 5
     #  7 - compressor continuously running time be.. (30-90 mins, default: 30, step 1)
-    #  8 - Defrost start temperature (P3) - (26-60, temp type 1, def = 46, step 2 [-7C]
+    #  8 - Defrost start temperature (P3) - (26-60, temp type 1, def = 46, step 2[-7C]
     # *9 - Max defrost time (P4) mins (1-12, def 12, step 1)
     # 10 - Defrost exit temp (P5) - type 1 (76-120, step 2, def: 86 = 13c
     # 17 (may need to start at *15) -Expansion overheat level - 40-100, temp type 1, srep 2, def = 66 (3C)
@@ -557,13 +527,13 @@ number:
     #  0 - Compressor running speed (%)
     #  1 - Compressor target frequency (Hz)
     #  2 - PFC Voltage (V)
-    # *3 - Water inlet temp (AIN1) [type 1]
+    # *3 - Water inlet temp (AIN1)[type 1]
     #  4 - Water outlet temp (AIN2)[type 1]
     #  5 - Ambient Temp (AIN7) [type 1]
     # *6 - Gas exhaust temp (AIN5) [divide by 2]
     #  7 - Outer coil pipe temp (evaporator) AIN3 [type 1]
-    #  8 - Gas return temp (AIN6) - [type 1]
-    # *9 - Inner coil pipe temp (Heat exchanger) - AIN4 [type 1]
+    #  8 - Gas return temp (AIN6) -[type 1]
+    # *9 - Inner coil pipe temp (Heat exchanger) - AIN4[type 1]
     # 10 - Compressor Frequency (Hz)
     # 11 - Compressor Current (x10 A)
     #*12 - Cooling plate temp (divide by 2)
