@@ -1,4 +1,4 @@
-# MASTER ESPHome Configuration for Fairland/Inverpad on LilyGO T-CAN485
+# MASTER ESPHome Configuration for Fairland/Inverpad on LilyGO T-CAN485 board
 
 substitutions:
   name_prefix: Pool Heat Pump
