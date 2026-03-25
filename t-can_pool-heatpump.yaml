@@ -52,7 +52,6 @@ light:
     rgb_order: GRB
     pin: GPIO4
     num_leds: 1
-    rmt_channel: 0
     chipset: ws2812
     name: "RGB Indicator"
 
